@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cookieSession from "cookie-session";
+import db from "./modules/DbHelper";
 
 let app = express();
 
@@ -21,7 +22,7 @@ app.listen(8088, () => {
 })
 
 // 拦截器
-app.use('/api', (request, response, next) => {
+app.use('*', (request, response, next) => {
     // if (   //   配置多个 允许跨域的域名
     //     request.headers.origin == 'http://127.0.0.1:8080' ||
     //     request.headers.origin == 'https://www.baidu.com'
@@ -75,27 +76,49 @@ app.post("/api/regs", (request, response, next) => {
  * error    =>  msg,status
  */
 app.post('/api/login', (request, response, next) => {
+    // let userObj = request.body;
+    // let flag = userList.some(el => {
+    //     return el.uname == userObj.uname && el.upwd == userObj.upwd;
+    // })
+    // let RTObj = JSON.parse(JSON.stringify(userObj));
+
+    // if (flag) {
+    //     // 登录成功 创建 session
+    //     request.session['userInfo'] = userObj;
+
+    //     RTObj.msg = '登录成功';
+    //     RTObj.status = 1;
+    // } else {
+    //     RTObj.msg = '登录失败';
+    //     RTObj.status = -1;
+    //     delete (RTObj.uname);
+    //     delete (RTObj.upwd);
+    // }
+    // // console.info("储存session-------"+request.session['userInfo'].uname);
+
+    // response.json(RTObj);
+
     let userObj = request.body;
-    let flag = userList.some(el => {
-        return el.uname == userObj.uname && el.upwd == userObj.upwd;
-    })
-    let RTObj = JSON.parse(JSON.stringify(userObj));
-
-    if (flag) {
-        // 登录成功 创建 session
-        request.session['userInfo'] = userObj;
-
-        RTObj.msg = '登录成功';
-        RTObj.status = 1;
-    } else {
-        RTObj.msg = '登录失败';
-        RTObj.status = -1;
-        delete (RTObj.uname);
-        delete (RTObj.upwd);
+    // 参数
+    let sql = "SELECT * FROM userinfo WHERE uname=? AND upwd=?";
+    let params = [userObj.uname, userObj.upwd];
+    // 返回值
+    let result = {
+        msg: '登录失败',
+        status: -1
     }
-    // console.info("储存session-------"+request.session['userInfo'].uname);
-
-    response.json(RTObj);
+    //进行查询
+    db.query(sql, params).then(data => {
+        console.log(data[0])
+        if (data[0]) {
+            result.msg = '登录成功';
+            result.status = 1;
+            result.data = data[0];
+        }
+        response.json(result);
+    }, err => {
+        response.json(result);
+    });
 })
 
 // 检验是否登录  
