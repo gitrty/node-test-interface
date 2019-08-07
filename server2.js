@@ -42,3 +42,5 @@ app.use('*', (request, response, next) => {
 });
 
 app.use('/api', require('./routes/api').router);
+
+app.use('/shopping', require('./routes/shopping').router);
