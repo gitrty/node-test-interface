@@ -6,7 +6,7 @@ import cookieSession from "cookie-session";
 let app = express();
 
 // 注册 中间件
-app.use(bodyParser({
+app.use(bodyParser({    //req.body-->post   req.query-->get
     extended: false
 }));
 app.use(cookieParser());
