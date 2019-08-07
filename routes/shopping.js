@@ -9,7 +9,6 @@ router.use('/wares', (request, response, next) => {
     if (tokenObj.token == 'toyo') {
         let sql = "SELECT * FROM `shopping`";
         db.query(sql, []).then(res => {
-            console.info(res);
             response.json(res);
         }, err => {
             response.json(err);
@@ -25,7 +24,6 @@ router.use('/usershop', (request, response, next) => {
     let sql = "SELECT * FROM `userinfo` WHERE uname=?";
     let params = [request.body.uname];
     db.query(sql, params).then(data => {
-        console.info()
         response.json(data[0])
     }, err => {
         response.json(err);
