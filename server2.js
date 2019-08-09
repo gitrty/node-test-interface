@@ -24,6 +24,7 @@ app.listen(8088, () => {
 app.use('*', (request, response, next) => {
     if (   //   配置多个 允许跨域的域名
         request.headers.origin == 'http://127.0.0.1:8080' ||
+        request.headers.origin == 'http://127.0.0.1:5500' ||
         request.headers.origin == 'http://localhost:8080'
     ) {
     // 设置返回值编码

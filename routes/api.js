@@ -21,7 +21,7 @@ router.post("/regs", (request, response, next) => {
             let params2 = [userObj.uname, userObj.upwd];
             //添加注册用户到数据库
             db.query(sql2, params2).then(res2 => {
-                console.info(res2);
+                // console.info(res2);
             });
         }
         response.json(result);
